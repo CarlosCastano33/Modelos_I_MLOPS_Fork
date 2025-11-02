@@ -13,3 +13,16 @@ Proyecto sustituto realizado para el curso Modelos 1, o MLOPS. Universidad de An
 - Cargue los archivos `sample_submission.csv`, `test_dataset.csv` y `train_dataset.csv` en la sesión **Files** del colab (justamente en la carpeta en la que se encuentra al abrir la sesión files, no los suba en otra ruta o la celda que carga los archivos no los encontrará).
 - Ejecute celda por celda en orden, no se salte ninguna.
 - Al finalizar la ejecución de todas las celdas, abra nuevamente la sesión **Files** del colab, podrá ver el archivo `submission.csv` con las predicciones finales, la última celda del notebook muestra este archivo.
+
+### Para fase-2:
+- Asegúrese de tener instalado Docker en su máquina y tener el servicio en ejecución.
+- Estando dentro del directorio **fase-2** abra una terminal (o línea de comandos).
+- Escriba y ejecute el comando `docker build -t fase_2 .` para crear la imagen que contendrá las librerías y los scripts `train.py` y `predict.py`.
+- Sea paciente, el comando anterior construirá la imagen descargando e instalando las librerías necesarias.
+- Luego de que se termine de crear la imagen puede verla con el comando `docker image ls`.
+- Asegúrese de tener en el directorio **fase-2** un archivo csv llamado `train_dataset.csv` (siempre que vaya a usar nuevos datos de entrenamiento asígnele el mismo nombre al archivo).
+- Escriba y ejecute el comando `docker run --rm --name fase_2_train -v "${PWD}:/app" fase_2 python train.py`, este comando creará el contenedor que ejecutará el entrenamiento del modelo predictivo. Fíjese que se escribe *--rm* en el comando, esto es ideal para cuando se quiera hacer un nuevo entrenamiento, ya que nos ahorrará el proceso de borrar el contenedor (con *--rm* se borra el contenedor al finalizar la ejecución) para volver ejecutar el train que generará el modelo entrenado.
+- Luego de que se realice el entrenamiento del modelo podrá ver un archivo llamado `model.pkl` que contendrá el modelo entrenado.
+- Asegúrese de tener en el directiorio **fase-2** un archivo csv llamado `data.csv` (siempre que vaya a usar nuevos datos para realizar las predicciones asígnele el mismo nombre al archivo).
+- Escriba y ejecute el comando `docker run --rm --name fase_2_predict -v "${PWD}:/app" fase_2 python predict.py`, este comando creará el contenedor que ejecutará las predicciones con base en los datos del archivo `data.csv`. Al igual que con la ejecución del train, este comando también usa *--rm* para eliminar el contenedor después de su ejecución, con el fin de evitar la eliminación manualmente cuando se vaya a predecir con datos nuevos.
+- Luego de la ejecución del script de predicción, en la carpeta **fase-2** verá un nuevo archivo llamado `predictions.csv` que contendrá las predicciones realizadas por el modelo.
