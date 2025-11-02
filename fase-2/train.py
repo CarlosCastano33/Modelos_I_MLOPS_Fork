@@ -47,7 +47,6 @@ for col in date_columns:
     train[col] = pd.to_datetime(train[col], errors='coerce').astype(int) / 10**9
 
 #Se convierten las variables categóricas a un formato númerico
-from sklearn.preprocessing import LabelEncoder
 
 categorical_columns = ['Gender', 'Is_current_loyalty_program_member',
                        'product_category',
@@ -68,11 +67,13 @@ train['Processing_time'] = train['released_date'] - train['payment_datetime']
 train['Loyalty_engagement'] = train['loyalty_points_redeemed'] / train['Product_value']
 
 #Convierte los valores no numéricos a valores nulos
-import numpy as np
 
 train.replace(r'[^0-9]+', np.nan, regex=True, inplace=True)
 
+#Cambia los valores faltantes por el número 0
 train.fillna(0, inplace=True)
+
+#Se convierte todo el Data Frame a tipo numérico
 train = train.apply(pd.to_numeric)
 
 #Se separan las variables predictoras y la variable objetivo
@@ -82,7 +83,6 @@ X = train.drop(['customer_experience','tracking_number', 'user_id', 'loyalty_tie
 y = train['customer_experience']
 
 #Se configura el modelo LGBMC Classifier
-from lightgbm import LGBMClassifier
 
 print("Training model...")
 model = LGBMClassifier(

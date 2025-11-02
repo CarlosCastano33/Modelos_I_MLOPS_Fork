@@ -45,7 +45,6 @@ for col in date_columns:
     data[col] = pd.to_datetime(data[col], errors='coerce').astype(int) / 10**9
 
 #Se convierten las variables categóricas a un formato númerico
-from sklearn.preprocessing import LabelEncoder
 
 categorical_columns = ['Gender', 'Is_current_loyalty_program_member',
                        'product_category',
