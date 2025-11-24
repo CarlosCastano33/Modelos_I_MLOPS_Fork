@@ -35,9 +35,9 @@ En esta fase se tendrá el notebook que realizará la carga, limpieza y preparac
 
 ### Para fase-3:
 - Asegúrese de tener instalado Docker en su máquina y tener el servicio en ejecución.
-- Asegúrese de tener la librería "requests" dentro de su entorno, ejecutando el comando `pip install requests`.
-Estando dentro del directorio **fase-3** abra una terminal (o línea de comandos).
+- Asegúrese de tener la librería "requests" dentro de su entorno, ejecutando el comando `pip install requests` con entorno virtual activado.
+- Estando dentro del directorio **fase-3** abra una terminal (o línea de comandos).
 - Escriba y ejecute el comando `docker build -t fase_3 .` para crear la imagen que contendrá las librerías y los scripts `train.py`, `predict.py` y `apirest.py`.
 - Escriba y ejecute el comando `docker run -p 5000:5000 fase_3` para ejecutar el contenedor con el api rest y los scripts de entrenamiento y predicción.
-- Abra otra terminal en el directorio **fase-3**.
+- Abra otra terminal en el directorio **fase-3** con el entorno virtual activado.
 - Escriba y ejecute el comando `python client.py`, el cual ejecutará el cliente que llamará a la api y a cada uno de los endpoints.
