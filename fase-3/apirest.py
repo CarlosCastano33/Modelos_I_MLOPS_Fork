@@ -2,12 +2,14 @@ from flask import Flask, request, jsonify
 import threading
 import joblib
 import os
-import padas as pd
+import pandas as pd
 
 app = Flask(__name__)
 
 train_status = "not training"
+prediction_status = "without prediction"
 MODEL_PATH = "model.pkl"
+import predict
 
 def _train():
     global train_status
@@ -18,17 +20,18 @@ def _train():
     # Como el script guarda el modelo entrenado, cambiamos el estado del entrenamiento
     train_status = "not training"
 
-def _predict(): # Leer linea 47-49
-    return  
+# ------------------------------------------------------
+#        ENDPOINTS
+# ------------------------------------------------------
 
 @app.route("/status", methods=["GET"])
 def status():
-    return jsonify({"status": train_status})
+    return jsonify({"status": train_status}), 200
 
 @app.route("/train", methods=["POST"])
 def train_endpoint():
     if train_status == "training":
-        return jsonify({"error": "Already training"}), 400
+        return jsonify({"error": "Already training"}), 409
 
     thread = threading.Thread(target=_train)
     thread.start()
@@ -36,22 +39,29 @@ def train_endpoint():
 
 @app.route("/predict", methods=["POST"])    # Recibe solo un dato
 def predict_endpoint():
+    global prediction_status
+
     data = request.json
     df = pd.DataFrame([data])
+    df.to_csv("data.csv", index=False)
 
-    # Se carga el modelo
+    # Se valida existencia del modelo entrenado
     if not os.path.exists(MODEL_PATH):
-        return jsonify({"error": "Model not found"}), 500
-    model = joblib.load('model.pkl')
+        return jsonify({"error": "Model not found"}), 404
+    
+    predict.main()
+    prediction_status = "prediction made"
 
-    prediction = model.predict(df)[0]  # TODO Transformar columnas del DataFrame como se hace en predict.py
-                                    # TODO Puede ser en una funcion interna _predict()
-                                # TODO O puede ser modificar el predict.py e importarlo (Más limpio)
+    prediction = pd.read_csv('predictions.csv')
+    return jsonify({"Prediction": prediction.to_dict(orient="records")}), 200
 
-    mapping = {0: 'bad', 1: 'neutral', 2: 'good'}
-    label = mapping.get(prediction, "unknown")
+@app.route("/predict/last", methods=["GET"])    # Devuelve la última predicción
+def predict_made():
+    if prediction_status == "without prediction":
+        return jsonify({"Error": "There are no predictions yet"}), 404
 
-    return jsonify({"prediction": int(prediction), "label": label})
+    prediction = pd.read_csv('predictions.csv')
+    return jsonify({"Prediction": prediction.to_dict(orient="records")}), 200
 
 if __name__ == "__main__":
     app.run(debug=True, host="0.0.0.0", port=5000)
