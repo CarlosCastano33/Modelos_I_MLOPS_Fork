@@ -32,3 +32,12 @@ En esta fase se tendrá el notebook que realizará la carga, limpieza y preparac
 - Escriba y ejecute el comando `docker run --rm --name fase_2_predict -v "${PWD}:/app" fase_2 python predict.py`, este comando creará el contenedor que ejecutará las predicciones con base en los datos del archivo `data.csv`. Al igual que con la ejecución del train, este comando también usa *--rm* para eliminar el contenedor después de su ejecución, con el fin de evitar la eliminación manualmente cuando se vaya a predecir con datos nuevos.
 - Ejecutar `docker run --rm --name fase_2_predict -v "%cd%:/app" fase_2 python predict.py` si estás en CMD.
 - Luego de la ejecución del script de predicción, en la carpeta **fase-2** verá un nuevo archivo llamado `predictions.csv` que contendrá las predicciones realizadas por el modelo.
+
+### Para fase-3:
+- Asegúrese de tener instalado Docker en su máquina y tener el servicio en ejecución.
+- Asegúrese de tener la librería "requests" dentro de su entorno, ejecutando el comando `pip install requests`.
+Estando dentro del directorio **fase-3** abra una terminal (o línea de comandos).
+- Escriba y ejecute el comando `docker build -t fase_3 .` para crear la imagen que contendrá las librerías y los scripts `train.py`, `predict.py` y `apirest.py`.
+- Escriba y ejecute el comando `docker run -p 5000:5000 fase_3` para ejecutar el contenedor con el api rest y los scripts de entrenamiento y predicción.
+- Abra otra terminal en el directorio **fase-3**.
+- Escriba y ejecute el comando `python client.py`, el cual ejecutará el cliente que llamará a la api y a cada uno de los endpoints.
