@@ -19,7 +19,7 @@ def _train():
     train_status = "training"
     import train
     # ejecutar el archivo completo
-    train  # con que se importe, ya se ejecuta todo
+    # train  # con que se importe, ya se ejecuta todo
     train_status = "not training"
 
 #Endpoint para consultar el estado del entrenamiento
@@ -43,7 +43,7 @@ def train_endpoint():
 #Endpoint para realizar una predicción
 @app.route("/predict", methods=["POST"])    # Recibe solo un dato
 def predict_endpoint():
-    import predict
+    
     global prediction_status
 
     data = request.json
@@ -54,7 +54,7 @@ def predict_endpoint():
     if not os.path.exists(MODEL_PATH):
         return jsonify({"error": "Model not found"}), 404
     
-    predict.main()
+    import predict
     prediction_status = "prediction made"
 
     prediction = pd.read_csv('predictions.csv')

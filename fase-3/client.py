@@ -46,8 +46,7 @@ data = {
     "estimated_delivery_date": "2020-01-17",
     "received_date": "2020-01-17",
     "shipping_method": "standard",
-    "tracking_number": "***9AWDD64SYI",
-    "customer_experience": "neutral"
+    "tracking_number": "***9AWDD64SYI"
 }
 
 #Se realiza la predicción

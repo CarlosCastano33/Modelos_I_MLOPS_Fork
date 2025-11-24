@@ -1,2 +1,6 @@
 fase-2/model.pkl
 fase-2/predictions.csv
+venv/
+.env/
+*.pyc
+__pycache__/

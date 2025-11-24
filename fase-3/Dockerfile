@@ -20,6 +20,9 @@ COPY train.py .
 COPY predict.py .
 COPY apirest.py .
 
+# Copiar el dataset de entrenamiento
+COPY train_dataset.csv .
+
 #Se expone el puerto 5000 para el api rest
 EXPOSE 5000
 
